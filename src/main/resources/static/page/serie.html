@@ -1,0 +1,115 @@
+<script src="script/serie.js" type="text/javascript"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<div class="container-fluid">
+	<div class="modal fade" id="error" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Erreur</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Impossible de supprimer cette serie</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card bg-white">
+		<div class="card-header card-color">
+			<p class="h2 text-center text-uppercase font-weight-bold pt-2">Gestion
+				des series</p>
+		</div>
+		<div class="card-body container-fluid">
+			<div class="row">
+				<div class="col-sm-6 mb-2">
+					<label for="nom">Nom : </label> <input class="form-control"
+						type="text" id="nom" required>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col">
+					<button type="button" class="btn btn-outline-success mt-3 mb-3"
+						id="btn">Ajouter</button>
+				</div>
+			</div>
+			<script>
+				$('#btn')
+						.click(
+								function() {
+									var nom = $("#nom");
+
+									if ($('#btn').text() == 'Ajouter') {
+										var p = {
+											nom : nom.val(),
+
+										};
+										if (p.nom == "") {
+
+											swal({
+												title : "Somthing Wrong !",
+												text : "Tous les champs doit etre remplis!",
+												icon : "warning",
+												button : "OK",
+											});
+
+										} else {
+											$
+													.ajax({
+														url : 'series/save',
+														contentType : "application/json",
+														dataType : "json",
+														data : JSON
+																.stringify(p),
+														type : 'POST',
+														async : false,
+														success : function(
+																data,
+																textStatus,
+																jqXHR) {
+															table.ajax.reload();
+														},
+														error : function(jqXHR,
+																textStatus,
+																errorThrown) {
+															console
+																	.log(textStatus);
+														}
+
+													});
+											swal({
+												title : "Bien Ajoutee !",
+												icon : "success",
+												button : "OK",
+											});
+											$("#main-content").load(
+													"./page/serie.html");
+										}
+									}
+								});
+			</script>
+			<div class="row table-responsive m-auto rounded">
+				<table id="tserie" class="table table-hover w-100">
+					<thead>
+						<tr class="text-uppercase bg-light  w-100">
+							<th scope="col">Id</th>
+							<th scope="col">Nom</th>
+							<th scope="col">Supprimer</th>
+							<th scope="col">Modifier</th>
+						</tr>
+					</thead>
+					<tbody id="table-content">
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</div>
+</div>

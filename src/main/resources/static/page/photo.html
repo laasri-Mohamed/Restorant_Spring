@@ -1,0 +1,150 @@
+<script src="script/photo.js" type="text/javascript"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<link rel="stylesheet" href="style/photo.css">
+<div class="container-fluid">
+	<div class="modal fade" id="error" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Erreur</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Impossible de supprimer cette photo</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card bg-white">
+		<div class="card-header card-color">
+			<p class="h2 text-center text-uppercase font-weight-bold pt-2">Gestion
+				des photos</p>
+		</div>
+		<div class="card-body container-fluid">
+			<div class="donnee">
+
+				<div>
+					<label for="ville">Ville de restorant : </label> <select
+						name="ville" id="ville" class="form-control input-lg">
+						<option value="">Choisir ville</option>
+					</select>
+				</div>
+				<div>
+					<label for="zone">Zone de restorant : </label> <select name="zone"
+						id="zone" class="form-control input-lg">
+						<option value=""></option>
+					</select>
+				</div>
+
+				<div>
+					<label for="resto">Les restaurants disponibles : </label> <select
+						name="resto" id="resto" class="form-control input-lg">
+						<option value=""></option>
+					</select>
+				</div>
+				<div class="col">
+					<button type="button" class="btn btn-outline-success mt-3 mb-3"
+						id="btn" >Ajouter</button>
+				</div>
+			</div>
+			<script>
+			$('#btn').click(
+					function() {
+
+						var nom = $("#resto");
+						var url = $("#file");
+						if ($('#btn').text() == 'Ajouter') {
+							var p = {
+
+								url: url.val().replace(/C:\\fakepath\\/i, ''),
+								resto: {
+									id: nom.val()
+								}
+
+							};
+
+							if (p.resto == "" || p.url == "") {
+							
+								swal({
+									  title: "Somthing Wrong !",
+									  text: "Tous les champs doit etre remplis!",
+									  icon: "warning",
+									  button: "OK",
+									});
+								
+							} else {
+								$.ajax({
+									url: 'photos/save',
+									contentType: "application/json",
+									dataType: "json",
+									data: JSON.stringify(p),
+									type: 'POST',
+									async: false,
+									success: function(data, textStatus,
+										jqXHR) {
+										table.ajax.reload();
+									},
+									error: function(jqXHR, textStatus,
+										errorThrown) {
+										console.log(textStatus);
+									}
+
+								});
+								swal({
+									  title: "Bien Ajoutee !",
+									  icon: "success",
+									  button: "OK",
+									});
+
+								$("#main-content").load(
+									"./page/photo.html");
+							}
+						}
+					});
+			</script>
+			<div class="container">
+				<input type="file" id="file" accept="image/*" hidden>
+				<div class="img-area" data-img="">
+					<i class='bx bxs-cloud-upload icon'></i>
+					<h3>Upload Image</h3>
+					<p>
+						Image size must be less than <span>2MB</span>
+					</p>
+				</div>
+				<button class="select-image">Select Image</button>
+			</div>
+
+
+		</div>
+
+
+
+
+
+		<div class="row table-responsive m-auto rounded">
+			<table id="tphoto" class="table table-hover w-100">
+				<thead>
+					<tr class="text-uppercase bg-light  w-100">
+						<th scope="col">Id</th>
+						<th scope="col">Restaurant</th>
+						<th scope="col">Image</th>
+						<th scope="col">Supprimer</th>
+
+					</tr>
+
+				</thead>
+
+				<tbody id="table-content">
+
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>
+</div>

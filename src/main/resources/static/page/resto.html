@@ -1,0 +1,313 @@
+<script src="script/resto.js" type="text/javascript"></script>
+<link rel="stylesheet" href="style/style_Rating.css">
+<script src="script/star-ratings.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<div class="container-fluid">
+	<div class="modal fade" id="error" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Erreur</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Impossible de supprimer ce resto</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card bg-white">
+		<div class="card-header card-color">
+			<p class="h2 text-center text-uppercase font-weight-bold pt-2">Gestion
+				Restorants</p>
+		</div>
+		<div class="card-body container-fluid">
+			<div class="row">
+				<div class="col-sm-6 mb-2">
+					<label for="nom">Nom : </label> <input class="form-control"
+						type="text" id="nom" required>
+				</div>
+				<div class="col-sm-6 mb-2">
+					<label for="adresse">Adresse : </label> <input class="" type="text"
+						id="id" hidden> <input class="form-control" type="text"
+						id="adresse" required>
+
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-6 mb-2">
+					<label for="openTime">Open Time : </label> <input
+						class="form-control" type="time" id="openTime" required>
+				</div>
+				<div class="col-sm-6 mb-2">
+					<label for="closeTime">Close Time : </label> <input
+						class="form-control" type="time" id="closeTime" required>
+				</div>
+			</div>
+
+			<div class="row">
+
+				<div class="col-sm-6 mb-2">
+					<label for="week">Week-end ? </label> <select class="form-control"
+						id="week" required>
+						<option value="0">choisir une option</option>
+						<option value="true">Ouvert</option>
+						<option value="false">Fermer</option>
+					</select>
+				</div>
+				<div class="col-sm-6 mb-2">
+					<label for="rank"> </label>
+
+					<div class="center">
+						<fieldset class="rating">
+							<input type="radio" id="star5" name="rating" value="5" /><label
+								for="star5" class="full" title="Awesome"></label> <input
+								type="radio" id="star4.5" name="rating" value="4.5" /><label
+								for="star4.5" class="half"></label> <input type="radio"
+								id="star4" name="rating" value="4" /><label for="star4"
+								class="full"></label> <input type="radio" id="star3.5"
+								name="rating" value="3.5" /><label for="star3.5" class="half"></label>
+							<input type="radio" id="star3" name="rating" value="3" /><label
+								for="star3" class="full"></label> <input type="radio"
+								id="star2.5" name="rating" value="2.5" /><label for="star2.5"
+								class="half"></label> <input type="radio" id="star2"
+								name="rating" value="2" /><label for="star2" class="full"></label>
+							<input type="radio" id="star1.5" name="rating" value="1.5" /><label
+								for="star1.5" class="half"></label> <input type="radio"
+								id="star1" name="rating" value="1" /><label for="star1"
+								class="full"></label> <input type="radio" id="star0.5"
+								name="rating" value="0.5" /><label for="star0.5" class="half"></label>
+						</fieldset>
+
+					</div>
+
+
+
+
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6 mb-2">
+
+					<label for="serie">Serie de restorant : </label> <select
+						class="form-control" id="serie" name="serie">
+						<option value="0">choisir une option</option>
+
+					</select>
+				</div>
+				<div class="col-sm-6 mb-2">
+				<label for="Rank"  >Rank :</label>
+					<input class="form-control" type="text" id="rank" required>
+				</div>
+
+			</div>
+
+			<div class="row">
+				<div class="col-sm-6 mb-2">
+					<label for="ville">Ville de restorant : </label> <select
+						name="country" id="country" class="form-control input-lg">
+						<option value="0">Choisire Ville</option>
+					</select>
+				</div>
+
+
+				<div class="col-sm-6 mb-2">
+					<label for="zone">Zone de restorant : </label> <select name="zone"
+						id="zone" class="form-control input-lg">
+						<option value="0" onclick="showMap();">Choisire Zone</option>
+					</select>
+				</div>
+
+
+			</div>
+			<form id="localisation" style="display: none">
+				<div class="row" id="loca">
+					<div class="col-sm-6 mb-2">
+						<label for="lat">Lattitude : </label> <input
+							class="form-control input-lg" placeholder="lat" type="text"
+							id="lat" required>
+					</div>
+
+
+
+					<div class="col-sm-6 mb-2">
+						<label for="lng">Longitudinale : </label> <input
+							class="form-control input-lg" type="text" id="lng"
+							placeholder="lng">
+					</div>
+
+				</div>
+
+				<div class="mapform">
+					<div id="map" style="width: 100%; height: 400px;" class="my-3"></div>
+					<script>
+						let map;
+						function initMap() {
+							map = new google.maps.Map(document
+									.getElementById("map"), {
+								center : {
+									lat : 33.24,
+									lng : -8.49
+								},
+								zoom : 14,
+								scrollwheel : true,
+							});
+
+							const uluru = {
+								lat : 33.24,
+								lng : -8.49
+							};
+							let marker = new google.maps.Marker({
+								position : uluru,
+								map : map,
+								draggable : true
+							});
+
+							google.maps.event.addListener(marker,
+									'position_changed', function() {
+										let lat = marker.position.lat()
+										let lng = marker.position.lng()
+										$('#lat').val(lat)
+										$('#lng').val(lng)
+									})
+
+							google.maps.event.addListener(map, 'click',
+									function(event) {
+										pos = event.latLng
+										marker.setPosition(pos)
+									})
+						}
+					</script>
+					<script async defer
+						src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap"
+						type="text/javascript"></script>
+				</div>
+			</form>
+			<div class="row">
+				<div class="col">
+					<button type="button" class="btn btn-outline-success mt-3 mb-3"
+						id="btn">Ajouter</button>
+				</div>
+			</div>
+			<script>
+				$('#btn')
+						.click(
+								function() {
+									var nom = $("#nom");
+									var adresse = $("#adresse");
+									var openTime = $("#openTime");
+									var closeTime = $("#closeTime");
+									var week = $("#week");
+									var rank = $("#rank");
+									var zone = $("#zone");
+									var serie = $("#serie");
+									var lat = $("#lat");
+									var lng = $("#lng");
+									if ($('#btn').text() == 'Ajouter') {
+										var p = {
+											nom : nom.val(),
+											adresse : adresse.val(),
+											openTime : openTime.val(),
+											closeTime : closeTime.val(),
+											week : week.val(),
+											rank : rank.val(),
+											height : lng.val(),
+											width : lat.val(),
+
+											serie : {
+												id : serie.val()
+											},
+
+											zone : {
+												id : zone.val()
+											}
+										};
+										if (p.nom == "" || p.adresse == ""
+												|| p.openTime == ""
+												|| p.closeTime == ""
+												|| p.adresse == ""
+												|| p.height == ""
+												|| p.width == "") {
+
+											swal({
+												title : "Somthing Wrong !",
+												text : "Tous les champs doit etre remplis!",
+												icon : "warning",
+												button : "OK",
+											});
+
+										} else {
+											$
+													.ajax({
+														url : 'restos/save',
+														contentType : "application/json",
+														dataType : "json",
+														data : JSON
+																.stringify(p),
+														type : 'POST',
+														async : false,
+														success : function(
+																data,
+																textStatus,
+																jqXHR) {
+															table.ajax.reload();
+														},
+														error : function(jqXHR,
+																textStatus,
+																errorThrown) {
+															console
+																	.log(textStatus);
+														}
+													});
+											swal({
+												title : "Bien Ajoutee !",
+												icon : "success",
+												button : "OK",
+											});
+											$("#main-content").load(
+													"./page/resto.html");
+										}
+									}
+								});
+			</script>
+			<div class="row table-responsive m-auto rounded">
+				<table id="tresto" class="table table-hover w-100">
+					<thead>
+						<tr class="text-uppercase bg-light  w-100">
+							<th scope="col">Id</th>
+							<th scope="col">Nom</th>
+							<th scope="col">Adresse</th>
+							<th scope="col">Open Time</th>
+							<th scope="col">Close Time</th>
+							<th scope="col">Week</th>
+							<th scope="col">Rating</th>
+							<th scope="col">Serie</th>
+							<th scope="col">Zone</th>
+							<th scope="col">Supprimer</th>
+							<th scope="col">Modifier</th>
+						</tr>
+					</thead>
+					<tbody id="table-content">
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</div>
+
+
+
+
+
+</div>
+
+
+</div>
+</div>
